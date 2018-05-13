@@ -223,17 +223,17 @@ static ssize_t rdabp_gpio_enable_irq_store(struct device *dev,
 	return count;
 }
 
-static DEVICE_ATTR(gpio_open, 0777,
+static DEVICE_ATTR(gpio_open, 0333,
 		NULL, rdabp_gpio_open_store);
-static DEVICE_ATTR(gpio_close,0777,
+static DEVICE_ATTR(gpio_close,0333,
 		NULL, rdabp_gpio_close_store);
-static DEVICE_ATTR(gpio_set_io, 0777,
+static DEVICE_ATTR(gpio_set_io, 0333,
 		NULL,rdabp_gpio_set_io_store);
-static DEVICE_ATTR(gpio_get_value, 0777,
+static DEVICE_ATTR(gpio_get_value, 0333,
 		NULL,rdabp_gpio_get_value_store);
-static DEVICE_ATTR(gpio_set_value,  0777,
+static DEVICE_ATTR(gpio_set_value,  0333,
 		NULL,rdabp_gpio_set_value_store);
-static DEVICE_ATTR(gpio_enable_irq, 0777,
+static DEVICE_ATTR(gpio_enable_irq, 0333,
 		NULL,rdabp_gpio_enable_irq_store);
 
 
