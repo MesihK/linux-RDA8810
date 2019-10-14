@@ -35,6 +35,7 @@
 #include "tgt_ap_board_config.h"
 
 #ifndef CONFIG_RDA_FPGA
+#define CONFIG_RDA_FPGA
 
 #if 0
 #define MSYS_DUMP_FRAME
@@ -133,7 +134,9 @@ static unsigned int gmsys_rx = 0;
 static struct msys_master *gmsys = NULL;
 static struct msys_device *gmsys_dev = NULL;
 static struct rda_bp_info gbp_info;
+#ifndef CONFIG_RDA_FPGA
 static u32 gcalib_info[3];
+#endif
 static int msys_async_done = 0;
 
 static char gbp_mod_ver[RDA_MOD_QTY][MODEM_MOD_VER_BUF_LEN];
@@ -483,7 +486,9 @@ static void rda_msys_fill_version(void)
 /*====================================================================*/
 /* Support for /proc/modem_version */
 
+#ifndef CONFIG_RDA_FPGA
 static struct proc_dir_entry *proc_md;
+#endif
 
 static int md_proc_show(struct seq_file *m, void *v)
 {
@@ -497,10 +502,12 @@ static int md_proc_show(struct seq_file *m, void *v)
 		seq_printf(m, "%s\n", gbp_mod_ver[i]);
 	seq_printf(m, "Built on %s\n", gbp_info.build_time);
 	seq_printf(m, "------------------\n");
+#ifndef CONFIG_RDA_FPGA
 	seq_printf(m, "   RF: %s\n",
 			gcalib_status[gcalib_info[0]]);
 	seq_printf(m, "Audio: %s\n",
 			gcalib_status[gcalib_info[1]]);
+#endif
 
 	return 0;
 }
@@ -520,8 +527,9 @@ static const struct file_operations md_proc_ops = {
 /*====================================================================*/
 /* Support for /proc/modem_rfcalib */
 
-static struct proc_dir_entry *proc_rfcalib;
 
+#ifndef CONFIG_RDA_FPGA
+static struct proc_dir_entry *proc_rfcalib;
 static int rfcalib_proc_show(struct seq_file *m, void *v)
 {
 	int i;
@@ -564,6 +572,7 @@ static const struct file_operations rfcalib_proc_ops = {
 	.llseek = seq_lseek,
 	.release = single_release,
 };
+#endif
 #endif /* CONFIG_PROC_FS */
 
 #ifndef CONFIG_RDA_FPGA
@@ -1234,8 +1243,10 @@ static int __init rda_msys_late_init(void)
 		pr_err("rda_msys: debugfs init failed!\n");
 
 #ifdef CONFIG_PROC_FS
+#ifndef CONFIG_RDA_FPGA
 	proc_md = proc_create("modem_version", 0, NULL, &md_proc_ops);
 	proc_rfcalib = proc_create("modem_rfcalib", 0, NULL, &rfcalib_proc_ops);
+#endif
 #endif
 
 	return 0;
